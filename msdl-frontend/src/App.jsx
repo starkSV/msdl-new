@@ -1,9 +1,22 @@
+import { Routes, Route } from 'react-router-dom';
+import Header from './components/Header';
+import Footer from './components/Footer';
+import HomePage from './pages/HomePage';
+import ProductDetailPage from './pages/ProductDetailPage';
+
 function App() {
   return (
-    <div className="bg-slate-900 text-white min-h-screen flex items-center justify-center">
-      <h1 className="text-3xl font-bold">Project Setup Complete!</h1>
+    <div className="bg-primary text-white min-h-screen flex flex-col">
+      <Header />
+      <main className="container mx-auto p-4 md:p-6">
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="product/:productId" element={<ProductDetailPage />} />
+        </Routes>
+      </main>
+      <Footer />
     </div>
   )
 }
 
-export default App
+export default App;
