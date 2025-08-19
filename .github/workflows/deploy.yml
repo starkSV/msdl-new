@@ -1,0 +1,25 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [ "main" ] # Runs whenever you push to the main branch
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout your repository
+        uses: actions/checkout@v4
+
+      - name: Install, build, and upload your site
+        uses: withastro/action-vite-gh-pages@v1
+        with:
+          path: msdl-frontend # Specifies the path to your vite project
+          token: ${{ secrets.GITHUB_TOKEN }}
+          domain: msdl.tech-latest.com # Your custom domain
