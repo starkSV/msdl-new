@@ -13,6 +13,7 @@ const ChevronUpDownIcon = () => (
 
 const ProductDetailPage = () => {
   const { productId } = useParams();
+  const [productName, setProductName] = useState('');
   const newsTopic = "windows"; 
   const rssFeedUrl = `https://tech-latest.com/tag/${newsTopic}/feed/`;
 
@@ -23,6 +24,24 @@ const ProductDetailPage = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isFetchingLinks, setIsFetchingLinks] = useState(false);
   const [error, setError] = useState(null);
+
+  // This new useEffect hook fetches the product name
+  useEffect(() => {
+    const fetchProductName = async () => {
+      try {
+        const response = await fetch('/data/products.json');
+        const data = await response.json();
+        if (data[productId]) {
+          setProductName(data[productId]);
+        } else {
+          setProductName('Unknown Product');
+        }
+      } catch (e) {
+        setProductName('Product Details');
+      }
+    };
+    fetchProductName();
+  }, [productId]);
 
   useEffect(() => {
     const fetchLanguages = async () => {
@@ -69,33 +88,37 @@ const ProductDetailPage = () => {
   };
   
   return (
-    <div>
+    <div className="max-w-6xl mx-auto">
       <Link to="/" className="text-accent hover:text-accent-hover mb-6 inline-block">&larr; Back to All Products</Link>
       
       <div className="text-left mb-8">
-        <h1 className="text-3xl lg:text-4xl font-bold">Product Details</h1>
-        <p className="mt-2 text-slate-400">Downloads, guides, and news for Product ID: {productId}</p>
+        <h1 className="text-3xl lg:text-4xl font-bold">
+          {productName || `Product ID: ${productId}`}
+        </h1>
+        <p className="mt-2 text-slate-400">Select your language and get your download links, or browse related guides and news below.</p>
       </div>
 
       {/* Main two-column grid layout */}
       <div className="grid grid-cols-1 lg:grid-cols-3 lg:gap-12">
         
         {/* === MAIN CONTENT (Left Column) === */}
-        <div className="lg:col-span-2">
-          {/* --- Download Tool Section --- */}
+        <div className="lg:col-span-2 space-y-8">
+          {/* --- Download Tool Card --- */}
           <div className="bg-primary-light p-6 rounded-lg border border-slate-700">
-            <h2 className="text-2xl font-bold mb-6">Download Tool</h2>
+            <h2 className="text-2xl font-bold mb-6">Select Language</h2>
             {isLoading ? (
               <p className="text-slate-400">Loading languages...</p>
             ) : error && languages.length === 0 ? (
               <p className="text-red-500">Error: {error}</p>
             ) : (
-              <>
-                <div className="max-w-sm">
-                  <label className="block text-sm font-medium text-slate-300 mb-2">Select Language</label>
+              // === NEW HORIZONTAL LAYOUT ===
+              <div className="flex flex-col sm:flex-row sm:items-end sm:gap-4">
+                {/* --- Language Selector --- */}
+                <div className="flex-grow">
+                  {/* <label htmlFor="language-select" className="block text-sm font-medium text-slate-300 mb-2">Select Language</label> */}
                   <Listbox value={selectedLanguage} onChange={setSelectedLanguage}>
                     <div className="relative">
-                      <Listbox.Button className="relative w-full cursor-default rounded-lg bg-slate-800 py-3 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75">
+                      <Listbox.Button id="language-select" className="relative w-full cursor-default rounded-lg bg-slate-800 py-3 pl-4 pr-10 text-left border border-slate-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent">
                         <span className="block truncate">{selectedLanguage?.LocalizedLanguage}</span>
                         <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2"><ChevronUpDownIcon /></span>
                       </Listbox.Button>
@@ -110,12 +133,13 @@ const ProductDetailPage = () => {
                   </Listbox>
                 </div>
       
-                <div className="mt-6">
-                  <button onClick={handleFetchDownloads} disabled={!selectedLanguage || isFetchingLinks} className="px-6 py-3 bg-accent text-white font-semibold rounded-lg shadow-md hover:bg-accent-hover disabled:bg-slate-600 disabled:cursor-not-allowed transition-colors">
+                {/* --- Get Links Button --- */}
+                <div className="mt-4 sm:mt-0 flex-shrink-0">
+                  <button onClick={handleFetchDownloads} disabled={!selectedLanguage || isFetchingLinks} className="w-full px-6 py-3 bg-accent text-white font-semibold rounded-lg shadow-md hover:bg-accent-hover disabled:bg-slate-600 disabled:cursor-not-allowed transition-colors">
                     {isFetchingLinks ? 'Fetching...' : 'Get Download Links'}
                   </button>
                 </div>
-              </>
+              </div>
             )}
 
             {error && downloadLinks.length === 0 && <div className="mt-6 text-red-500">Error: {error}</div>}
@@ -123,6 +147,9 @@ const ProductDetailPage = () => {
             {downloadLinks.length > 0 && (
               <div className="mt-8 pt-6 border-t border-slate-700">
                 <h3 className="text-xl font-semibold">Your Downloads</h3>
+                <p className="mt-2 p-3 text-sm text-amber-200 bg-amber-900/30 rounded-lg border border-amber-800/50">
+                  <span className="font-bold">Notice:</span> For security reasons, these links are tied to your IP address and will expire in 24 hours.
+                </p>
                 <div className="mt-4 space-y-3">
                   {downloadLinks.map(link => (
                     <a key={link.Uri} href={link.Uri} target="_blank" rel="noopener noreferrer" className="block text-blue-400 hover:underline">
@@ -135,7 +162,9 @@ const ProductDetailPage = () => {
           </div>
 
           {/* --- Installation Guide Section --- */}
-          <InstallationGuide />
+          <div className="bg-primary-light p-6 rounded-lg border border-slate-700">
+            <InstallationGuide />
+          </div>
         </div>
 
         {/* === SIDEBAR (Right Column) === */}
