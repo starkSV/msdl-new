@@ -13,8 +13,8 @@ const Footer = () => {
           product
         </p>
         <div className="space-x-4">
-          <a href="#" className="hover:text-accent">About</a>
-          <a href="#" className="hover:text-accent">Privacy Policy</a>
+          <a href="/about" className="hover:text-accent">About</a>
+          <a href="/privacy-policy" className="hover:text-accent">Privacy Policy</a>
         </div>
       </div>
     </footer>
