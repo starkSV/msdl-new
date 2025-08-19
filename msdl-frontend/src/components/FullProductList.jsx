@@ -18,7 +18,7 @@ const FullProductList = () => {
     const fetchProducts = async () => {
       setIsLoading(true);
       try {
-        const response = await fetch('/data/products.json');
+        const response = await fetch(`${import.meta.env.BASE_URL}data/products.json`);
         if (!response.ok) throw new Error('Network response was not ok');
         const data = await response.json();
         const productArray = Object.entries(data).map(([id, name]) => ({ id, name }));

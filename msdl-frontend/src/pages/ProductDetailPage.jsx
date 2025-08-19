@@ -29,7 +29,7 @@ const ProductDetailPage = () => {
   useEffect(() => {
     const fetchProductName = async () => {
       try {
-        const response = await fetch(`${import.meta.env.BASE_URL}data/products.json`);
+        const response = await fetch('/data/products.json');
         const data = await response.json();
         if (data[productId]) {
           setProductName(data[productId]);
