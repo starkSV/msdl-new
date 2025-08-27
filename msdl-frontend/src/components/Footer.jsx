@@ -12,9 +12,11 @@ const Footer = () => {
           </a>{' '}
           product
         </p>
-        <div className="space-x-4">
-          <a href="/about" className="hover:text-accent">About</a>
-          <a href="/privacy-policy" className="hover:text-accent">Privacy Policy</a>
+        <div className="space-x-2">
+          <span>Explore Our Other Tools:</span> 
+          <a href="https://pixlyzer.tech-latest.com/" className="hover:text-accent underline">Pixlyzer</a>
+          <span>&</span>
+          <a href="https://bottleneck.tech-latest.com/" className="hover:text-accent underline">Bottleneck Calculator</a>
         </div>
       </div>
     </footer>

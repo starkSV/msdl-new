@@ -7,12 +7,10 @@ import AboutPage from './pages/AboutPage';
 import PrivacyPolicyPage from './pages/PrivacyPolicyPage';
 
 function App() {
-  const location = useLocation();
-  const needsStickyFooter = location.pathname !== '/';
   return (
     <div className="bg-primary text-white min-h-screen flex flex-col">
       <Header />
-      <main className={`container mx-auto p-4 md:p-6 ${needsStickyFooter ? 'flex-grow' : ''}`}>
+      <main className="container mx-auto p-4 md:p-6 flex-grow">
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="product/:productId" element={<ProductDetailPage />} />
