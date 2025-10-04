@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'; // Import useNavigate
 const quickSearches = [
   { label: 'Windows 8.1', query: 'Windows 8.1' },
   { label: 'Latest Windows 10', query: '22H2' },
-  { label: 'Latest Windows 11', query: '24H2' },
+  { label: 'Latest Windows 11', query: '25H2' },
 ];
 
 const FullProductList = () => {
